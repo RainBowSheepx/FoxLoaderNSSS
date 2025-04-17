@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.fox2code.foxloader.server.mixins",
+  "plugin": "com.fox2code.foxloader.loader.mixin.MixinTestModePlugin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "AccessorEntityList",
+    "MixinBlock",
+    "MixinBlockFire",
+    "MixinChunkBlockMap",
+    "MixinEntity",
+    "MixinEntityItem",
+    "MixinEntityLiving",
+    "MixinEntityPlayer",
+    "MixinEntityPlayerMP",
+    "MixinItem",
+    "MixinItemStack",
+    "MixinMinecraftServer",
+    "MixinNBTTagIntArray",
+    "MixinNetherPortalHandler",
+    "MixinNetLoginHandler",
+    "MixinNetServerHandler",
+    "MixinPlayerController",
+    "MixinStringTranslate",
+    "MixinTileEntity",
+    "MixinWorld"
+  ]
+}

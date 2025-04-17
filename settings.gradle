@@ -5,9 +5,11 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'ReIndevFoxLoader'
+rootProject.name = 'ReIndev+NSSS+FoxLoader'
 include 'client'
 include 'server'
+include 'clientNSSS'
+include 'serverNSSS'
 include 'common'
 include 'final'
 include 'betacraft'

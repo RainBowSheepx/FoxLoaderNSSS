@@ -17,3 +17,5 @@ hs_err_pid*.log
 
 /client/libs/*.jar
 /server/libs/*.jar
+/clientNSSS/libs/*.jar
+/serverNSSS/libs/*.jar
