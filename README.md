@@ -1,6 +1,6 @@
-# ReIndevFoxLoader
+# ReIndev+NSSS+FoxLoader
 
-ModLoader for Minecraft ReIndev
+ModLoader for Minecraft ReIndev & NSSS
 
 [![](https://www.jitpack.io/v/com.fox2code/FoxLoader.svg)](https://www.jitpack.io/#com.fox2code/FoxLoader)
 
