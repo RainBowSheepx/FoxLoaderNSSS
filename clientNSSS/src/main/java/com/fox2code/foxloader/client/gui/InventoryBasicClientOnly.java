@@ -1,6 +1,7 @@
 package com.fox2code.foxloader.client.gui;
 
-import net.minecraft.src.client.inventory.InventoryBasic;
+
+import com.mojang.minecraft.entity.item.InventoryBasic;
 
 public class InventoryBasicClientOnly extends InventoryBasic implements InventoryClientOnly {
     public InventoryBasicClientOnly(String var1, int var2) {

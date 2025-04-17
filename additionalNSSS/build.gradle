@@ -1,4 +1,4 @@
-// Client build.gradle
+// Additional build.gradle
 plugins {
     id 'maven-publish'
 }
@@ -11,7 +11,6 @@ dependencies {
 
     // Do not use API here
     implementation(fileTree(dir: 'libs', include: [project['nsss.clientJar'] as String]))
-    implementation(project(":additionalNSSS"))
     //noinspection GradlePackageUpdate
     compileOnly("net.java.jinput:jinput:2.0.5")
     //noinspection GradlePackageUpdate

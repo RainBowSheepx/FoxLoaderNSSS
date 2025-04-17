@@ -1,6 +1,7 @@
 package com.fox2code.foxloader.client;
 
-import net.minecraft.src.client.KeyBinding;
+
+import com.mojang.minecraft.player.controller.KeyBinding;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;

@@ -154,6 +154,9 @@ File clientNSSSFile = new File(project.rootDir, "clientNSSS" + File.separator +
 File serverNSSSFile = new File(project.rootDir, "serverNSSS" + File.separator +
         "libs" + File.separator + project['nsss.serverJar'])
 
+File additNSSSFile = new File(project.rootDir, "additionalNSSS" + File.separator +
+        "libs" + File.separator + project['nsss.clientJar'])
+
 downloadIfNeeded(new URL(project['reindev.clientUrl'] as String), clientFile,
         project['reindev.clientSHA256Sum'] as String)
 downloadIfNeeded(new URL(project['reindev.serverUrl'] as String), serverFile,
@@ -163,3 +166,6 @@ downloadIfNeeded(new URL(project['nsss.clientUrl'] as String), clientNSSSFile,
         project['nsss.clientSHA256Sum'] as String)
 downloadIfNeeded(new URL(project['nsss.serverUrl'] as String), serverNSSSFile,
         project['nsss.serverSHA256Sum'] as String)
+
+downloadIfNeeded(new URL(project['nsss.clientUrl'] as String), additNSSSFile,
+        project['nsss.clientSHA256Sum'] as String)

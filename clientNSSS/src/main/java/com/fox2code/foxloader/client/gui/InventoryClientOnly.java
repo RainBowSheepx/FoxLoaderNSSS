@@ -1,6 +1,7 @@
 package com.fox2code.foxloader.client.gui;
 
-import net.minecraft.src.client.inventory.IInventory;
+
+import com.mojang.minecraft.entity.item.IInventory;
 
 /**
  * Mark a {@link IInventory} as client side only, and to avoid any network inconsistencies

@@ -4,9 +4,10 @@ import com.fox2code.foxloader.loader.ModContainer;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.ChatColors;
 import com.fox2code.foxloader.updater.UpdateManager;
-import net.minecraft.client.Minecraft;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.render.Tessellator;
 import net.minecraft.src.client.gui.GuiSlot;
-import net.minecraft.src.client.renderer.Tessellator;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiModListContainer extends GuiSlot {
@@ -15,7 +16,7 @@ public class GuiModListContainer extends GuiSlot {
     private int selected = 0;
 
     public GuiModListContainer(GuiModList guiModList) {
-        super(Minecraft.theMinecraft,
+        super(Minecraft.getMinecraft(),
                 guiModList.width,
                 guiModList.height, 32,
                 guiModList.height - 51, 36);

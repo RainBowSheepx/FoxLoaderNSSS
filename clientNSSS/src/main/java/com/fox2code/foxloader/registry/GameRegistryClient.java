@@ -2,16 +2,26 @@ package com.fox2code.foxloader.registry;
 
 import static com.fox2code.foxloader.loader.ClientMod.*;
 
-import com.fox2code.foxloader.client.CreativeItems;
+
 import com.fox2code.foxloader.client.mixins.AccessorEntityList;
 import com.fox2code.foxloader.client.registry.RegisteredBlockImpl;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.loader.packet.ServerHello;
 import com.fox2code.foxloader.network.SidedMetadataAPI;
+
+import com.mojang.minecraft.crafting.CraftingManager;
+import com.mojang.minecraft.crafting.IRecipe;
+import com.mojang.minecraft.crafting.ShapedRecipes;
+import com.mojang.minecraft.crafting.ShapelessRecipes;
+import com.mojang.minecraft.entity.item.Item;
+import com.mojang.minecraft.entity.item.ItemBlock;
+import com.mojang.minecraft.level.tile.Block;
+import com.mojang.minecraft.level.tile.BlockGlass;
+import com.mojang.minecraft.level.tile.BlockWorkbench;
+import com.mojang.minecraft.level.tile.StepSound;
+import com.mojang.minecraft.level.tile.material.Material;
 import net.minecraft.src.client.gui.StringTranslate;
-import net.minecraft.src.game.block.*;
-import net.minecraft.src.game.item.*;
-import net.minecraft.src.game.recipe.*;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
@@ -61,7 +71,7 @@ public class GameRegistryClient extends GameRegistry {
 
     public static void initialize() {
         // The check is actually for initializing both Item and Block
-        if (Block.blocksList[0].blockID != Item.itemsList[0].itemID) {
+        if (Block.allBlocks[0].blockID != Item.itemsList[0].shiftedIndex) {
             throw new IllegalStateException("Air block is not air?");
         }
     }
@@ -69,10 +79,10 @@ public class GameRegistryClient extends GameRegistry {
     public static void freeze() {
         if (!ModLoader.areAllModsLoaded())
             throw new IllegalArgumentException("Mods didn't finished to load!");
-        final Block stoneBlock = Block.blocksList[1];
-        for (int i = 0; i < Block.blocksList.length; i++) {
-            if (Block.blocksList[i] == null) {
-                Block.blocksList[i] = stoneBlock;
+        final Block stoneBlock = Block.allBlocks[1];
+        for (int i = 0; i < Block.allBlocks.length; i++) {
+            if (Block.allBlocks[i] == null) {
+                Block.allBlocks[i] = stoneBlock;
             }
         }
         final Item airItem = Item.itemsList[0];
@@ -102,7 +112,7 @@ public class GameRegistryClient extends GameRegistry {
 
     @Override
     public RegisteredBlock getRegisteredBlock(int id) {
-        return (RegisteredBlock) Block.blocksList[id];
+        return (RegisteredBlock) Block.allBlocks[id];
     }
 
     @Override
@@ -216,7 +226,7 @@ public class GameRegistryClient extends GameRegistry {
                 block = new Block(blockId, material) {};
                 break;
             case GLASS:
-                block = new BlockGlass(blockId) {};
+                block = new BlockGlass(blockId, 49, material, false) {};
                 break;
             case WORKBENCH:
                 block = new BlockWorkbench(blockId) {};
@@ -266,12 +276,12 @@ public class GameRegistryClient extends GameRegistry {
             if ((effectiveToolBit & (1 << enumTool.ordinal())) != 0) {
                 block.setEffectiveTool(enumTool);
             }
-        }
+        }/*
         if (blockBuilder.tooltipColor != 0) {
             block.setTooltipColor(blockBuilder.tooltipColor);
         }
         block.setBlockName(blockBuilder.blockName == null ?
-                name.replace(':', '.') : blockBuilder.blockName);
+                name.replace(':', '.') : blockBuilder.blockName);*/
         return block;
     }
 
@@ -297,9 +307,9 @@ public class GameRegistryClient extends GameRegistry {
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException("Failed to instantiate Item", e);
             }
-            if (item.itemID != itemId) {
+            if (item.shiftedIndex != itemId) {
                 throw new RuntimeException("Item didn't ended up with id it was given to " +
-                        "(given " + itemId + " got " + item.itemID + ")");
+                        "(given " + itemId + " got " + item.shiftedIndex + ")");
             }
         } else if (blockPrimary != null &&
                 blockSecondary != null) {
@@ -309,27 +319,27 @@ public class GameRegistryClient extends GameRegistry {
         } else {
             item = new Item(pItemId) {};
         }
-        item.setMaxStackSize(itemBuilder.maxStackSize);
+        item.maxStackSize = itemBuilder.maxStackSize;
         Item containerItem = (Item) itemBuilder.containerItem;
         if (containerItem != null) {
             item.setContainerItem(containerItem);
         }
-        if (block == null) {
+/*        if (block == null) {
             item.setItemName(itemBuilder.itemName == null ?
                     name.replace(':', '.') : itemBuilder.itemName);
-        }
+        }*/
         if (itemBuilder.itemBurnType != 0 && itemBuilder.itemBurnTime != 0) {
             item.setBurnTime(itemBuilder.itemBurnTime, itemBuilder.itemBurnType);
         }
-        if (itemBuilder.tooltipColor != 0) {
+/*        if (itemBuilder.tooltipColor != 0) {
             item.setTooltipColor(itemBuilder.tooltipColor);
-        }
+        }*/
         if (itemBuilder.worldItemScale != 0F) {
             ((RegisteredItem) item).setWorldItemScale(itemBuilder.worldItemScale);
         }
-        if (!itemBuilder.hideFromCreativeInventory) {
+/*        if (!itemBuilder.hideFromCreativeInventory) {
             CreativeItems.addToCreativeInventory(new ItemStack(item));
-        }
+        }*/
         return (RegisteredItem) item;
     }
 
@@ -340,39 +350,44 @@ public class GameRegistryClient extends GameRegistry {
 
     @Override
     public void registerRecipe(RegisteredItemStack result, Object... recipe) {
-        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
-        CraftingManager.getInstance().addRecipe(toItemStack(result), recipe);
+    //    if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
+      //  CraftingManager.getInstance().addRecipe(toItemStack(result), recipe);
+        throw new NotImplementedException("");
     }
 
     @Override
     public void registerShapelessRecipe(RegisteredItemStack result, Ingredient... ingredients) {
-        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
-        CraftingManager.getInstance().addShapelessRecipe(toItemStack(result), (Object[]) ingredients);
+      //  if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
+      //  CraftingManager.getInstance().addShapelessRecipe(toItemStack(result), (Object[]) ingredients);
+        throw new NotImplementedException("");
     }
 
     @Override
     public void registerFurnaceRecipe(RegisteredItem input, RegisteredItemStack output) {
-        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
-        FurnaceRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));
+      //  if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
+       // FurnaceRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));
+        throw new NotImplementedException("");
     }
 
     @Override
     public void registerBlastFurnaceRecipe(RegisteredItem input, RegisteredItemStack output) {
-        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
-        BlastFurnaceRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));
+/*        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
+        BlastFurnaceRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));*/
+       System.out.println("Trying to register blast furnace recipe, but NSSS don't have blast furnace!");
     }
 
     @Override
     public void registerFreezerRecipe(RegisteredItem input, RegisteredItemStack output) {
-        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
-        RefridgifreezerRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));
+/*        if (recipeFrozen) throw new UnsupportedOperationException(LATE_RECIPE_MESSAGE);
+        RefridgifreezerRecipes.instance.addSmelting(input.getRegisteredItemId(), toItemStack(output));*/
+        System.out.println("Trying to register freezer recipe, but NSSS don't have freezer!");
     }
 
     @ApiStatus.Internal
     public static void freezeRecipes() {
         if (recipeFrozen) return;
         recipeFrozen = true;
-        CraftingManager.getInstance().getRecipeList().sort(new RecipeSorter());
+     //   CraftingManager.getInstance().getRecipeList().sort(new RecipeSorter());
     }
 
     private static class RecipeSorter implements Comparator<Object> {

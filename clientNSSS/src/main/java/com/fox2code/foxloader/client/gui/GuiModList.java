@@ -3,8 +3,13 @@ package com.fox2code.foxloader.client.gui;
 import com.fox2code.foxloader.loader.ModContainer;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.updater.UpdateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.gui.*;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.gui.GuiButton;
+import com.mojang.minecraft.gui.GuiScreen;
+import com.mojang.minecraft.gui.GuiSmallButton;
+import com.mojang.minecraft.render.FontRenderer;
+import net.minecraft.src.client.gui.StringTranslate;
 import org.lwjgl.Sys;
 
 public class GuiModList extends GuiScreen {
@@ -51,15 +56,15 @@ public class GuiModList extends GuiScreen {
         if (var1.id == 0) {
             Sys.openURL("file://" + ModLoader.mods);
         } else if (var1.id == 1) {
-            this.mc.displayGuiScreen(this.parent);
+            this.mc.setCurrentScreen(this.parent);
         } else if (var1.id == 2) {
             UpdateManager.getInstance().doUpdates();
         } else if (var1.id == 3) {
             if (this.guiScreen instanceof GuiConfigProvider) {
-                Minecraft.getInstance().displayGuiScreen(
+                Minecraft.getMinecraft().setCurrentScreen(
                         ((GuiConfigProvider) this.guiScreen).provideConfigScreen(this));
             } else if (this.guiScreen instanceof GuiScreen) {
-                Minecraft.getInstance().displayGuiScreen((GuiScreen) this.guiScreen);
+                Minecraft.getMinecraft().setCurrentScreen((GuiScreen) this.guiScreen);
             } else if (this.doSingleUpdate) {
                 UpdateManager.getInstance().doUpdate(
                         this.modListContainer.getSelectedModContainer().id);
@@ -73,7 +78,7 @@ public class GuiModList extends GuiScreen {
 
     // If somehow you have a better implementation, go ahead
     private void openModConfigScreen(ModContainer modContainer) {
-        Minecraft.getInstance().displayGuiScreen(new GuiModConfig(this, modContainer));
+        Minecraft.getMinecraft().setCurrentScreen(new GuiModConfig(this, modContainer));
     }
 
     public FontRenderer getFontRenderer() {

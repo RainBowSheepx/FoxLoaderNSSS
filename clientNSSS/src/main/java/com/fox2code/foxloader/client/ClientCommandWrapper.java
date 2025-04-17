@@ -4,10 +4,11 @@ import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 import com.mojang.minecraft.entity.EntityPlayerSP;
 import net.minecraft.mitask.command.Command;
+import net.minecraft.src.client.gui.StringTranslate;
 
 public final class ClientCommandWrapper extends Command {
     private final CommandCompat commandCompat;
-
+    // In original NSSS commands are hardcoded, so I decided to use the reindev implementation
     public ClientCommandWrapper(CommandCompat commandCompat) {
         super(commandCompat.getName(), commandCompat.isOpOnly(), commandCompat.isHidden(), commandCompat.getAliases());
         this.commandCompat = commandCompat;

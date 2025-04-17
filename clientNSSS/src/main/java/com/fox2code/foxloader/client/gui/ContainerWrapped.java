@@ -1,6 +1,7 @@
 package com.fox2code.foxloader.client.gui;
 
-import net.minecraft.src.client.gui.Container;
+
+import com.mojang.minecraft.player.inventory.Container;
 
 /**
  * Tells FoxLoader that the container is a wrapped container.

@@ -5,8 +5,11 @@ import com.fox2code.foxloader.config.ConfigKey;
 import com.fox2code.foxloader.config.ConfigMenu;
 import com.fox2code.foxloader.config.ConfigStructure;
 import com.fox2code.foxloader.loader.ModContainer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.gui.*;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.gui.*;
+import net.minecraft.src.client.gui.GuiLinkConfirm;
+import net.minecraft.src.client.gui.StringTranslate;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -86,7 +89,7 @@ final class GuiModConfig extends GuiScreen {
                     break;
                 }
                 case TEXT: {
-                    this.modOptionsTextFields.add(new GuiTextFieldModOption(x, y, this.curInstance, configKey));
+                    this.modOptionsTextFields.add(new GuiTextFieldModOption(this,x, y, this.curInstance, configKey));
                     break;
                 }
             }
@@ -137,12 +140,12 @@ final class GuiModConfig extends GuiScreen {
                         Object instance = configKey.getField(this.curInstance);
                         if (this.mc.currentScreen == this && instance != null) {
                             if (instance instanceof GuiConfigProvider) {
-                                this.mc.displayGuiScreen(((GuiConfigProvider) instance)
+                                this.mc.setCurrentScreen(((GuiConfigProvider) instance)
                                         .provideConfigScreen(this));
                             } else if (instance instanceof GuiScreen) {
-                                this.mc.displayGuiScreen((GuiScreen) instance);
+                                this.mc.setCurrentScreen((GuiScreen) instance);
                             } else {
-                                this.mc.displayGuiScreen(new GuiModConfig(this, this.modContainer,
+                                this.mc.setCurrentScreen(new GuiModConfig(this, this.modContainer,
                                         configKey.configMenu, this.rootInstance, instance));
                             }
                         }
@@ -152,7 +155,7 @@ final class GuiModConfig extends GuiScreen {
                         configKey.callHandler(this.curInstance);
                         Object link = configKey.getField(this.curInstance);
                         if (this.mc.currentScreen == this && link != null) {
-                            this.mc.displayGuiScreen(new GuiLinkConfirm(this, link.toString()));
+                            this.mc.setCurrentScreen(new GuiLinkConfirm(this, link.toString()));
                         }
                         break;
                     }
@@ -160,7 +163,7 @@ final class GuiModConfig extends GuiScreen {
             }
 
             if (button.id == 200) {
-                this.mc.displayGuiScreen(this.parentScreen);
+                this.mc.setCurrentScreen(this.parentScreen);
             }
         }
     }
@@ -220,7 +223,7 @@ final class GuiModConfig extends GuiScreen {
 
         public GuiSliderModConfig(int id, int x, int y, String translate,
                                   Object curInstance, ConfigKey configKey) {
-            super(id, x, y, translate, 0f);
+            super(id, x, y,999, translate, 0f);
             this.curInstance = curInstance;
             this.configKey = configKey;
             Class<?> cls = configKey.field.getType();
@@ -257,17 +260,17 @@ final class GuiModConfig extends GuiScreen {
          }
 
         @Override
-        protected void mouseDragged(Minecraft var1, int var2, int var3) {
-            super.mouseDragged(var1, var2, var3);
-            if (this.visible && this.dragging) {
+        protected void func_560_b(Minecraft var1, int var2, int var3) {
+            super.func_560_b(var1, var2, var3);
+            if (this.enabled2 && this.dragging) {
                 this.applySliderChanges();
             }
         }
 
         @Override
-        public boolean mousePressed(Minecraft var1, int var2, int var3) {
-            boolean b = super.mousePressed(var1, var2, var3);
-            if (this.visible && this.dragging) {
+        public boolean func_562_c(Minecraft var1, int var2, int var3) {
+            boolean b = super.func_562_c(var1, var2, var3);
+            if (this.enabled2 && this.dragging) {
                 this.applySliderChanges();
             }
             return b;
@@ -275,7 +278,7 @@ final class GuiModConfig extends GuiScreen {
 
         private void applySliderChanges() {
             if (this.enabled) {
-                this.setModConfigValue((this.sliderValue * this.boundsSize) + this.lowerBounds);
+                this.setModConfigValue((this.value * this.boundsSize) + this.lowerBounds);
                 if (this.clamp) {
                     this.updateSliderValue();
                 }
@@ -284,7 +287,7 @@ final class GuiModConfig extends GuiScreen {
 
         private void updateSliderValue() {
             if (this.enabled) {
-                this.sliderValue = (float) ((getModConfigValue() - this.lowerBounds) / this.boundsSize);
+                this.value = (float) ((getModConfigValue() - this.lowerBounds) / this.boundsSize);
             }
         }
     }
@@ -293,13 +296,13 @@ final class GuiModConfig extends GuiScreen {
         private final Object curInstance;
         private final ConfigKey configKey;
 
-        public GuiTextFieldModOption(int x, int y, Object curInstance, ConfigKey configKey) {
-            super(x, y, 150, 20, "");
+        public GuiTextFieldModOption(GuiScreen parent, int x, int y, Object curInstance, ConfigKey configKey) {
+            super(parent,Minecraft.getMinecraft().fontRender,x, y, 150, 20, "");
             this.curInstance = curInstance;
             this.configKey = configKey;
             String text = this.getModConfigValue();
             this.setText(text);
-            this.setCursorPosition(text.length());
+          //  this.setCursorPosition(text.length());
             int i = (int) configKey.configEntry.upperBounds();
             this.setMaxStringLength(i > 1 ? i : 255);
         }
@@ -323,7 +326,7 @@ final class GuiModConfig extends GuiScreen {
         public void textboxKeyTyped(char eventChar, int eventKey) {
             super.textboxKeyTyped(eventChar, eventKey);
             if (this.isEnabled && this.isFocused) {
-                this.setModConfigValue(this.text);
+                this.setModConfigValue(this.getText());
             }
         }
     }
