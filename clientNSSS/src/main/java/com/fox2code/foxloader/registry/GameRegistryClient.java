@@ -15,10 +15,7 @@ import com.mojang.minecraft.crafting.ShapedRecipes;
 import com.mojang.minecraft.crafting.ShapelessRecipes;
 import com.mojang.minecraft.entity.item.Item;
 import com.mojang.minecraft.entity.item.ItemBlock;
-import com.mojang.minecraft.level.tile.Block;
-import com.mojang.minecraft.level.tile.BlockGlass;
-import com.mojang.minecraft.level.tile.BlockWorkbench;
-import com.mojang.minecraft.level.tile.StepSound;
+import com.mojang.minecraft.level.tile.*;
 import com.mojang.minecraft.level.tile.material.Material;
 import net.minecraft.src.client.gui.StringTranslate;
 import org.apache.commons.lang3.NotImplementedException;
@@ -232,19 +229,19 @@ public class GameRegistryClient extends GameRegistry {
                 block = new BlockWorkbench(blockId) {};
                 break;
             case FALLING:
-                block = new BlockFalling(blockId, material);
+                block = new Block(blockId, material){}; // TODO: BlockFalling;
                 break;
             case SLAB:
-                EnumSlab slabType = EnumSlab.BRICK;
+/*                EnumSlab slabType = EnumSlab.BRICK;
                 for (EnumSlab enumSlabCandidate : EnumSlab.values()) {
                     if (enumSlabCandidate.hasBottomSide && enumSlabCandidate.hasTopSide &&
                             enumSlabCandidate.material == material) {
                         slabType = enumSlabCandidate;
                         break;
                     }
-                }
+                }*/
 
-                block = new BlockSlab(blockId, !primary, slabType);
+                block = new BlockStep(blockId, !primary); // TODO: Slab material;
                 selfNotify = true;
                 break;
             case STAIRS:
@@ -252,9 +249,9 @@ public class GameRegistryClient extends GameRegistry {
                 selfNotify = true;
                 break;
         }
-        if (selfNotify) {
+/*        if (selfNotify) {
             Block.selfNotify.set(blockId, true);
-        }
+        }*/
         block.stepSound = STEP_SOUND.translate(blockBuilder.builtInStepSounds);
         if (blockBuilder.blockHardness != 0f) {
             ((RegisteredBlockImpl) block).setRegisteredHardness(blockBuilder.blockHardness);
@@ -262,9 +259,9 @@ public class GameRegistryClient extends GameRegistry {
         if (blockBuilder.blockResistance != 0f) {
             ((RegisteredBlockImpl) block).setRegisteredResistance(blockBuilder.blockResistance);
         }
-        if (blockBuilder.blockBurnType != 0 && blockBuilder.blockBurnTime != 0) {
+/*        if (blockBuilder.blockBurnType != 0 && blockBuilder.blockBurnTime != 0) { // TODO: Block burn time
             block.setBurnTime(blockBuilder.blockBurnTime, blockBuilder.blockBurnType);
-        }
+        }*/
         if (blockBuilder.chanceToEncourageFire != 0) {
             chanceToEncourageFire[blockId] = blockBuilder.chanceToEncourageFire;
         }
@@ -272,11 +269,11 @@ public class GameRegistryClient extends GameRegistry {
             abilityToCatchFire[blockId] = blockBuilder.abilityToCatchFire;
         }
         byte effectiveToolBit = blockBuilder.effectiveToolBit;
-        for (EnumTools enumTool : EnumTools.values()) {
+     /*   for (EnumTools enumTool : EnumTools.values()) { // TODO: Effective tools
             if ((effectiveToolBit & (1 << enumTool.ordinal())) != 0) {
                 block.setEffectiveTool(enumTool);
             }
-        }/*
+        }
         if (blockBuilder.tooltipColor != 0) {
             block.setTooltipColor(blockBuilder.tooltipColor);
         }
@@ -311,11 +308,11 @@ public class GameRegistryClient extends GameRegistry {
                 throw new RuntimeException("Item didn't ended up with id it was given to " +
                         "(given " + itemId + " got " + item.shiftedIndex + ")");
             }
-        } else if (blockPrimary != null &&
+        } /*else if (blockPrimary != null &&
                 blockSecondary != null) {
             item = new ItemBlockSlab(pItemId, block.blockID, blockPrimary, blockSecondary, !primary);
-        } else if (block != null) {
-            item = new ItemBlock(pItemId, block.blockID) {};
+        }*/ else if (block != null) {
+            item = new ItemBlock(block.blockID) {};
         } else {
             item = new Item(pItemId) {};
         }
@@ -328,9 +325,9 @@ public class GameRegistryClient extends GameRegistry {
             item.setItemName(itemBuilder.itemName == null ?
                     name.replace(':', '.') : itemBuilder.itemName);
         }*/
-        if (itemBuilder.itemBurnType != 0 && itemBuilder.itemBurnTime != 0) {
+/*        if (itemBuilder.itemBurnType != 0 && itemBuilder.itemBurnTime != 0) {
             item.setBurnTime(itemBuilder.itemBurnTime, itemBuilder.itemBurnType);
-        }
+        }*/
 /*        if (itemBuilder.tooltipColor != 0) {
             item.setTooltipColor(itemBuilder.tooltipColor);
         }*/

@@ -14,13 +14,14 @@ import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.network.SidedMetadataAPI;
 import com.fox2code.foxloader.registry.GameRegistryClient;
 import com.fox2code.foxloader.updater.UpdateManager;
-import net.minecraft.client.Minecraft;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.networknew.NetworkManager;
 import net.minecraft.fox2code.ChatColors;
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.src.client.gui.StringTranslate;
-import net.minecraft.src.client.packets.NetworkManager;
-import net.minecraft.src.client.packets.Packet250PluginMessage;
-import net.minecraft.src.game.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 import java.io.*;
@@ -215,13 +216,13 @@ public final class ClientModLoader extends ModLoader {
         }
 
         public static void preemptivelySendClientHello(NetworkManager networkManager) {
-            if (ModLoaderOptions.INSTANCE.preemptiveNetworking) {
+          /*  if (ModLoaderOptions.INSTANCE.preemptiveNetworking) {
                 networkManager.addToSendQueue(new Packet250PluginMessage(
                         ModLoader.foxLoader.id, clientHello));
                 didPreemptiveNetworking = true;
-            } else {
+            } else {*/
                 didPreemptiveNetworking = false;
-            }
+            //}
         }
 
         public static void glScaleItem(ItemStack itemStack) {
@@ -278,10 +279,10 @@ public final class ClientModLoader extends ModLoader {
                 if (serverName == null) {
                     if (metadata.containsKey(SidedMetadataAPI.KEY_FOXLOADER_VERSION)) {
                         serverName = "FoxLoader " + metadata.get(SidedMetadataAPI.KEY_FOXLOADER_VERSION);
-                    } else if (((NetworkConnection) Minecraft.getInstance().getSendQueue()).hasFoxLoader()) {
+                    } else if (((NetworkConnection) Minecraft.getMinecraft().getSendQueue()).hasFoxLoader()) {
                         serverName = ChatColors.DARK_RED + "Obsolete FoxLoader" + ChatColors.GRAY;
                     } else {
-                        serverName = "ReIndev " + BuildConfig.REINDEV_VERSION;
+                        serverName = "NSSS " + BuildConfig.REINDEV_VERSION;
                     }
                 }
                 Internal.serverNameCache = ChatColors.GRAY + " (Server: " + serverName + ")";

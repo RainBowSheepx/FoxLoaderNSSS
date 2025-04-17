@@ -2,10 +2,11 @@ package com.fox2code.foxloader.loader;
 
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.renderer.entity.Render;
-import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.Entity;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.render.Render;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface ClientMod extends Mod.SidedMod {
     }
 
     static Minecraft getGameInstance() {
-        return Minecraft.getInstance();
+        return Minecraft.getMinecraft();
     }
 
     static NetworkPlayer getLocalNetworkPlayer() {

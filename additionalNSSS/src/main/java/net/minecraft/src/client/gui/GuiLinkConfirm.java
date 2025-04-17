@@ -31,9 +31,9 @@ public class GuiLinkConfirm extends GuiYesNo {
 
     public void initGui() {
         int y = this.height / 6 + 96;
-        this.controlList.add(new GuiSmallButton(0, this.width / 2 - 50 - 105, y, 100, 20, this.openText));
-        this.controlList.add(new GuiSmallButton(1, this.width / 2 - 50, y, 100, 20, this.copyText));
-        this.controlList.add(new GuiSmallButton(2, this.width / 2 - 50 + 105, y, 100, 20, this.cancelText));
+        this.controlList.add(new GuiButtonCustom(0, this.width / 2 - 50 - 105, y, 100, 20, this.openText));
+        this.controlList.add(new GuiButtonCustom(1, this.width / 2 - 50, y, 100, 20, this.copyText));
+        this.controlList.add(new GuiButtonCustom(2, this.width / 2 - 50 + 105, y, 100, 20, this.cancelText));
     }
 
     protected void actionPerformed(GuiButton button) {

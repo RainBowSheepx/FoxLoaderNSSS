@@ -38,6 +38,11 @@ static void generateBuildConfig0(File buildConfigSrc, Project project) {
     final String SERVER_URL = project['reindev.serverUrl']
     final String CLIENT_SHA256_SUM = project['reindev.clientSHA256Sum']
     final String SERVER_SHA256_SUM = project['reindev.serverSHA256Sum']
+    final String NSSS_VERSION = project['nsss.version']
+    final String CLIENT_NSSS_URL = project['nsss.clientUrl']
+    final String SERVER_NSSS_URL = project['nsss.serverUrl']
+    final String CLIENT_NSSS_SHA256_SUM = project['nsss.clientSHA256Sum']
+    final String SERVER_NSSS_SHA256_SUM = project['nsss.serverSHA256Sum']
     FileOutputStream fileOutputStream = new FileOutputStream(buildConfigSrc)
     try {
         PrintStream printStream = new PrintStream(fileOutputStream)
@@ -58,6 +63,11 @@ static void generateBuildConfig0(File buildConfigSrc, Project project) {
         printStream.println("    public static final String SERVER_URL = \"" + SERVER_URL + "\";")
         printStream.println("    public static final String CLIENT_SHA256_SUM = \"" + CLIENT_SHA256_SUM + "\";")
         printStream.println("    public static final String SERVER_SHA256_SUM = \"" + SERVER_SHA256_SUM + "\";")
+        printStream.println("    public static final String NSSS_VERSION = \"" + NSSS_VERSION + "\";")
+        printStream.println("    public static final String CLIENT_NSSS_URL = \"" + CLIENT_NSSS_URL + "\";")
+        printStream.println("    public static final String SERVER_NSSS_URL = \"" + SERVER_NSSS_URL + "\";")
+        printStream.println("    public static final String CLIENT_NSSS_SHA256_SUM = \"" + CLIENT_NSSS_SHA256_SUM + "\";")
+        printStream.println("    public static final String SERVER_NSSS_SHA256_SUM = \"" + SERVER_NSSS_SHA256_SUM + "\";")
         printStream.println("}")
     } finally {
         fileOutputStream.close()

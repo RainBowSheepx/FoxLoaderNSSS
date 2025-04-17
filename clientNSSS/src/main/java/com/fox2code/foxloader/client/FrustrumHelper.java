@@ -2,6 +2,7 @@ package com.fox2code.foxloader.client;
 
 
 import com.mojang.minecraft.level.tile.phys.AxisAlignedBB;
+import com.mojang.minecraft.level.tile.phys.ClippingHelperImplementation;
 import com.mojang.minecraft.render.Frustrum;
 
 /**
@@ -20,7 +21,7 @@ public class FrustrumHelper {
 
     public static class Hooks {
         public static void update(Frustrum frustrum, double x, double y, double z) {
-            ClippingHelperImpl.getInstance();
+            ClippingHelperImplementation.func_1155_a();
             frustrum.func_343_a(x, y, z);
         }
     }

@@ -1,7 +1,8 @@
 package com.fox2code.foxloader.client.network;
 
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.item.ItemStack;
 
 public interface ImplNetworkPlayerControllerExt {
     default boolean notifyRegisteredItemUsedImpl(EntityPlayer player, ItemStack itemstack, int x, int y, int z) {
