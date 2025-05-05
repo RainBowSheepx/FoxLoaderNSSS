@@ -204,7 +204,7 @@ public abstract class GuiSlot implements ChatColors {
         GL11.glDisable(2896);
         GL11.glDisable(2912);
         Tessellator tessellator = Tessellator.instance;
-        GL11.glBindTexture(3553, this.mc.renderEngine.getTex("/gui/background.png"));
+        GL11.glBindTexture(3553, this.mc.renderEngine.getTex("/dirt.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float var17 = 32.0F;
         if (this.mc.mcWorld == null/* || !(this instanceof GuiTexturePackSlot)*/) {
@@ -332,7 +332,7 @@ public abstract class GuiSlot implements ChatColors {
 
     private void overlayBackground(int var1, int var2, int var3, int var4) {
         Tessellator var5 = Tessellator.instance;
-        GL11.glBindTexture(3553, this.mc.renderEngine.getTex("/gui/background.png"));
+        GL11.glBindTexture(3553, this.mc.renderEngine.getTex("/dirt.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         float var6 = 32.0F;
         var5.startDrawingQuads();

@@ -7,8 +7,11 @@ import com.fox2code.foxloader.launcher.BuildConfig;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.ChatColors;
 import com.fox2code.foxloader.network.SidedMetadataAPI;
-import net.minecraft.src.client.Session;
-import net.minecraft.src.client.gui.*;
+
+import com.mojang.minecraft.gui.GuiButton;
+import com.mojang.minecraft.gui.GuiMainMenu;
+import com.mojang.minecraft.gui.GuiScreen;
+import com.mojang.minecraft.util.Session;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,15 +29,15 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     @Inject(method = "initGui", at = @At(value = "RETURN"))
     public void onInitGui(CallbackInfo ci) {
         this.controlList.add(new GuiUpdateButton(500, this.width - 62, 2, 60, 20, "Mods"));
-        if (this.mc.theWorld == null) {
+        if (this.mc.mcWorld == null) {
             SidedMetadataAPI.Internal.setActiveMetaData(null);
         }
     }
 
     @Inject(method = "actionPerformed", at = @At(value = "HEAD"), cancellable = true)
-    public void onActionPerformed(GuiButton var1, CallbackInfo ci) {
-        if (var1.id == 500) {
-            this.mc.displayGuiScreen(new GuiModList(this));
+    public void onActionPerformed(GuiButton guibutton, CallbackInfo ci) {
+        if (guibutton.id == 500) {
+            this.mc.setCurrentScreen(new GuiModList(this));
             ci.cancel();
         }
     }

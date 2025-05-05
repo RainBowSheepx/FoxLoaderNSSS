@@ -4,13 +4,14 @@ import com.fox2code.foxloader.client.network.ImplNetworkPlayerControllerExt;
 import com.fox2code.foxloader.loader.ClientMod;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.player.PlayerController;
-import net.minecraft.src.client.player.PlayerControllerMP;
-import net.minecraft.src.client.player.PlayerControllerSP;
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.item.Item;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.item.Item;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.player.controller.PlayerController;
+import com.mojang.minecraft.player.controller.PlayerControllerMP;
+import com.mojang.minecraft.player.controller.PlayerControllerSP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,8 +38,8 @@ public class MixinPlayerControllerMix extends PlayerController implements
             ci.cancel();
             return;
         }
-        if ((!this.mc.theWorld.multiplayerWorld) && item != null &&
-                item.itemID == Item.axeWood.itemID && this.isInCreativeMode() &&
+        if ((!this.mc.mcWorld.multiplayerWorld) && item != null &&
+                item.itemID == Item.axeWood.shiftedIndex /*&& this.isInCreativeMode()*/ &&
                 networkPlayer.isOperator()) {
             x1 = x;
             y1 = y;
@@ -66,8 +67,8 @@ public class MixinPlayerControllerMix extends PlayerController implements
     @Override
     public boolean notifyRegisteredItemUsedImpl(EntityPlayer player, ItemStack itemstack, int x, int y, int z) {
         NetworkPlayer networkPlayer = (NetworkPlayer) this.mc.thePlayer;
-        if ((!this.mc.theWorld.multiplayerWorld) && itemstack != null &&
-                itemstack.itemID == Item.axeWood.itemID && this.isInCreativeMode() &&
+        if ((!this.mc.mcWorld.multiplayerWorld) && itemstack != null &&
+                itemstack.itemID == Item.axeWood.shiftedIndex /*&& this.isInCreativeMode()*/ &&
                 networkPlayer.isOperator()) {
             x2 = x;
             y2 = y;

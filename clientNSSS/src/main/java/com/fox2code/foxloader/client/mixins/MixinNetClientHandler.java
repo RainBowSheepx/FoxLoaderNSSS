@@ -6,12 +6,17 @@ import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkConnection;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.GameRegistryClient;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.packets.*;
-import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.entity.EntityList;
-import net.minecraft.src.game.level.World;
-import net.minecraft.src.game.level.WorldClient;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.Entity;
+import com.mojang.minecraft.entity.EntityList;
+import com.mojang.minecraft.level.World;
+import com.mojang.minecraft.level.WorldClient;
+import com.mojang.minecraft.networknew.NetClientHandler;
+import com.mojang.minecraft.networknew.NetworkManager;
+import net.minecraft.src.client.packets.Packet250PluginMessage;
+import com.mojang.minecraft.networknew.packet.Packet;
+import com.mojang.minecraft.networknew.packet.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,13 +57,13 @@ public abstract class MixinNetClientHandler implements NetworkConnection {
     @Inject(method = "handleVehicleSpawn", at = @At("HEAD"))
     public void onHandleVehicleSpawn(Packet23VehicleSpawn packet23, CallbackInfo ci) {
         packet23.type = GameRegistryClient.entityTypeIdMappingIn[packet23.type];
-        if (packet23.type == 70) {
+      /*  if (packet23.type == 70) {
             packet23.payload0 = GameRegistryClient.itemIdMappingIn[packet23.payload0];
-        }
+        }*/
     }
 
     @Redirect(method = "handleMobSpawn", at = @At(value = "INVOKE", target =
-            "Lnet/minecraft/src/game/entity/EntityList;createEntity(ILnet/minecraft/src/game/level/World;)Lnet/minecraft/src/game/entity/Entity;"))
+            "Lcom/mojang/minecraft/entity/EntityList;createEntity(ILcom/mojang/minecraft/level/World;)Lcom/mojang/minecraft/entity/Entity;"))
     public Entity onHandleMobSpawn(int i, World world) {
         if (i < 0) i += 256;
         return EntityList.createEntity(GameRegistryClient.entityTypeIdMappingIn[i], world);
@@ -66,7 +71,7 @@ public abstract class MixinNetClientHandler implements NetworkConnection {
 
     @Inject(method = "handleMultiBlockChange", at = @At("HEAD"))
     public void onHandleMultiBlockChange(Packet52MultiBlockChange packet52, CallbackInfo ci) {
-        short[] types = packet52.typeArray;
+        short[] types = packet52.coordinateArray;
         final int len = types.length;
         for (int i = 0; i < len; i++) {
             types[i] = GameRegistryClient.blockIdMappingIn[types[i]];
@@ -74,11 +79,11 @@ public abstract class MixinNetClientHandler implements NetworkConnection {
     }
 
     @Redirect(method = "handleMapChunk", at = @At(value = "INVOKE", target =
-            "Lnet/minecraft/src/game/level/WorldClient;setChunkData(IIIIIIZ[B)V"))
-    public void onSetChunkData(WorldClient instance, int mx, int my, int mz, int mxx, int mxy, int mxz, boolean init, byte[] data) {
+            "Lcom/mojang/minecraft/level/WorldClient;setChunkData(IIIIII[B)V"))
+    public void onSetChunkData(WorldClient instance, int mx, int my, int mz, int mxx, int mxy, int mxz, byte[] data) {
         ClientModLoader.Internal.networkChunkBytes = data;
         try {
-            instance.setChunkData(mx, my, mz, mxx, mxy, mxz, init, data);
+            instance.setChunkData(mx, my, mz, mxx, mxy, mxz, data);
         } finally {
             ClientModLoader.Internal.networkChunkBytes = null;
         }
@@ -96,7 +101,8 @@ public abstract class MixinNetClientHandler implements NetworkConnection {
         }
     }
 
-    @Inject(method = "handlePluginMessage", at = @At("HEAD"))
+   // @Inject(method = "handlePluginMessage", at = @At("HEAD"))
+    @Unique
     public void onHandlePluginMessage(Packet250PluginMessage packet250, CallbackInfo ci) {
         if (ModLoader.FOX_LOADER_MOD_ID.equals(packet250.channel) && !this.isFoxLoader) {
             ModLoader.getModLoaderLogger().info("Got FoxLoader packet");
@@ -127,7 +133,7 @@ public abstract class MixinNetClientHandler implements NetworkConnection {
 
     @Override
     public NetworkPlayer getNetworkPlayer() {
-        return (NetworkPlayer) Minecraft.getInstance().thePlayer;
+        return (NetworkPlayer) Minecraft.getMinecraft().thePlayer;
     }
 
     @Override

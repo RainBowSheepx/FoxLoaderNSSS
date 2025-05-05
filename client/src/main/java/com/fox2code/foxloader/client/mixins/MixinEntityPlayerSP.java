@@ -159,7 +159,7 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
         }
     }
 
-    @Override
+/*    @Override
     public void preparePlayerToSpawn() {
         super.preparePlayerToSpawn();
 
@@ -171,13 +171,13 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     @Unique
     public String customDimension="notcustom";
     @Unique
     public String customrespawnDimension="notcustom";
-    @Inject(method = "writeEntityToNBT",at = @At("TAIL"))
+/*    @Inject(method = "writeEntityToNBT",at = @At("TAIL"))
     public void writeEntityToNBT(NBTTagCompound var1, CallbackInfo ci) {
         var1.setString("customDimension", this.customDimension);
         var1.setString("customrespawnDimension", this.customrespawnDimension);
@@ -189,7 +189,7 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
     public void readEntityFromNBT(NBTTagCompound var1, CallbackInfo ci) {
         this.customDimension = var1.getString("customDimension");
         this.customrespawnDimension = var1.getString("customrespawnDimension");
-    }
+    }*/
     @Override
     public EnumStatus sleepInBedAt(int x, int y, int z) {
         this.customrespawnDimension=customDimension;

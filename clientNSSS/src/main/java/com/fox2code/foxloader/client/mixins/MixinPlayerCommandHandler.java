@@ -2,7 +2,8 @@ package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.client.ClientCommandWrapper;
 import com.fox2code.foxloader.registry.CommandCompat;
-import net.minecraft.client.Minecraft;
+
+import com.mojang.minecraft.Minecraft;
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.mitask.command.Command;
 import org.spongepowered.asm.mixin.Mixin;

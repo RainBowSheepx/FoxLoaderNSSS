@@ -1,31 +1,24 @@
 package com.fox2code.foxloader.client.mixins;
 
-import com.fox2code.foxloader.client.WorldProviderCustom;
+
 import com.fox2code.foxloader.launcher.FoxLauncher;
 import com.fox2code.foxloader.loader.ClientModLoader;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.network.SidedMetadataAPI;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.GameSettings;
-import net.minecraft.src.client.gui.GuiGameOver;
-import net.minecraft.src.client.gui.GuiScreen;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.MinecraftApplet;
+import com.mojang.minecraft.entity.EntityLiving;
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.EntityPlayerSP;
+import com.mojang.minecraft.gui.GuiScreen;
+import com.mojang.minecraft.level.World;
+import com.mojang.minecraft.player.controller.GameSettings;
+import com.mojang.minecraft.player.controller.PlayerController;
+import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.src.client.gui.StringTranslate;
-import net.minecraft.src.client.player.EntityPlayerSP;
-import net.minecraft.src.client.player.MovementInputFromOptions;
-import net.minecraft.src.client.player.PlayerController;
-import net.minecraft.src.game.block.Block;
-import net.minecraft.src.game.entity.EntityLiving;
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.level.NetherPortalHandler;
-import net.minecraft.src.game.level.World;
-import net.minecraft.src.game.level.WorldProvider;
-import net.minecraft.src.game.level.WorldSettings;
-import net.minecraft.src.game.level.chunk.ChunkCoordinates;
-import net.minecraft.src.game.level.chunk.ISaveFormat;
-import net.minecraft.src.game.level.chunk.ISaveHandler;
-import net.minecraft.src.game.stats.StatFileWriter;
-import net.minecraft.src.game.stats.StatList;
+
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -43,13 +36,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.fox2code.foxloader.client.WorldProviderCustom.getProviderForDimensioncustom;
+
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
     @Shadow public volatile boolean running;
-    @Shadow public GameSettings gameSettings;
-    @Shadow private static File minecraftDir;
+
+    @Shadow private static File dataFolder;
+
+
+    @Shadow private static Minecraft theMinecraft;
     @Unique private NetworkPlayer.ConnectionType loadedWorldType;
     @Unique private boolean closeGameDelayed;
     @Unique private boolean showDebugInfoPrevious;
@@ -57,7 +53,14 @@ public abstract class MixinMinecraft {
     @Unique public String DimR="notcustom";
 
 
-    @Inject(method = "startGame", at = @At("HEAD"))
+    private static PlayerCommandHandler pch;
+
+    @Inject(method = "Lcom/mojang/minecraft/Minecraft;<init>(Ljava/awt/Component;Ljava/awt/Canvas;Lcom/mojang/minecraft/MinecraftApplet;IIZ)V", at = @At("TAIL"))
+    public void preInit(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag, CallbackInfo ci){
+        pch = new PlayerCommandHandler(theMinecraft);
+    }
+
+    @Inject(method = "startupScreen", at = @At("HEAD"))
     public void onStartGame(CallbackInfo ci) {
         ClientModLoader.Internal.notifyRun();
     }
@@ -68,7 +71,7 @@ public abstract class MixinMinecraft {
     }
 
     @Inject(method = "changeWorld", at = @At("RETURN"))
-    public void onChangeWorld(World world, String var2, EntityPlayer player, CallbackInfo ci) {
+    public void onChangeWorld(World world, String var2, CallbackInfo ci) {
         if (world == null) {
             if (loadedWorldType != null) {
                 NetworkPlayer.ConnectionType
@@ -88,7 +91,7 @@ public abstract class MixinMinecraft {
     }
 
     @Inject(method = "startMainThread", at = @At("RETURN"))
-    private static void onGameStarted(String username, String sessionID, CallbackInfo ci) {
+    private static void onGameStarted(String s, String sessionId, String uuid, String s2, CallbackInfo ci) {
         try {
             Frame[] frames = Frame.getFrames();
             final List<Image> icons = Collections.singletonList(
@@ -105,8 +108,8 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "getMinecraftDir", at = @At("HEAD"))
     private static void onGetMinecraftDir(CallbackInfoReturnable<File> cir) {
-        if (minecraftDir == null) {
-            minecraftDir = FoxLauncher.getGameDir();
+        if (dataFolder == null) {
+            dataFolder = FoxLauncher.getGameDir();
         }
     }
 
@@ -118,7 +121,7 @@ public abstract class MixinMinecraft {
             ci.cancel();
         }
     }
-
+/*
     @Inject(method = "runTick", at = @At("RETURN"))
     public void onRunTickEnd(CallbackInfo ci) {
         if (this.showDebugInfoPrevious != this.gameSettings.showDebugInfo) {
@@ -131,7 +134,8 @@ public abstract class MixinMinecraft {
             this.closeGameDelayed = false;
             this.running = false;
         }
-    }@Shadow
+    }
+    @Shadow
     public World theWorld;
     @Shadow
     public EntityPlayerSP thePlayer;
@@ -142,17 +146,16 @@ public abstract class MixinMinecraft {
     @Shadow
     public PlayerController playerController;
     @Shadow
-
-    public abstract void changeWorld(World world, String arg2, EntityPlayer player) ;
-    @Inject(method = "respawn",at=@At("TAIL"),cancellable = true)
+    public abstract void changeWorld(World world, String arg2, EntityPlayer player) ;*/
+/*    @Inject(method = "respawn",at=@At("TAIL"),cancellable = true)
     public void respawnend(boolean arg1, int arg2,CallbackInfo ci) throws NoSuchFieldException, IllegalAccessException {
 
         this.thePlayer.getClass().getField("customrespawnDimension").set(thePlayer,this.DimR);
         this.thePlayer.getClass().getField("customDimension").set(thePlayer,this.DimR);
         if (this.Dim!="notcustom")thePlayer.dimension=3;
 
-    }
-    @Inject(method = "respawn",at=@At("HEAD"),cancellable = true)
+    }*/
+   /* @Inject(method = "respawn",at=@At("HEAD"),cancellable = true)
     public void respawn(boolean arg1, int arg2,CallbackInfo ci) throws NoSuchFieldException, IllegalAccessException {
         if (!this.theWorld.multiplayerWorld){
 
@@ -244,13 +247,13 @@ public abstract class MixinMinecraft {
             }
 
         }
-    }
-    @Shadow
+    }*/
+/*    @Shadow
 
-    public abstract void displayGuiScreen(GuiScreen gui);
+    public abstract void setCurrentScreen(GuiScreen gui);
     @Shadow
-    public GuiScreen currentScreen ;
-
+    public GuiScreen currentScreen ;*/
+/*
     @Inject(method = "usePortal",at=@At("HEAD"),cancellable = true)
     public void usePortal(CallbackInfo ci) throws NoSuchFieldException, IllegalAccessException{
 
@@ -312,18 +315,20 @@ public abstract class MixinMinecraft {
         }
     }
     @Shadow
-    private ISaveFormat saveLoader;
+    private ISaveFormat saveLoader;*/
+/*
     @Shadow
     public abstract void changeWorld1(World world);
     @Shadow
-    public abstract void changeWorld2(World world,String arg2);
+    public abstract void changeWorld(World world,String arg2);
     @Shadow
     public abstract void convertMapFormat(String arg1, String arg2);
     @Shadow
     public StatFileWriter statFileWriter;
+*/
 
 
-
+/*
     @Overwrite
     public void startWorld(String arg1, String arg2, WorldSettings worldInfo) {
         this.changeWorld1((World)null);
@@ -352,5 +357,5 @@ public abstract class MixinMinecraft {
                 this.changeWorld2(world, StringTranslate.getInstance().translateKey("gui.world.loading"));
             }
         }
-    }
+    }*/
 }

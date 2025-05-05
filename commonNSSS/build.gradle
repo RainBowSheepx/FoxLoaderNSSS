@@ -1,0 +1,27 @@
+// Common build.gradle
+plugins {
+    id 'maven-publish'
+}
+
+group 'com.fox2code'
+version project['foxloader.version']
+configurations {
+    include
+    implementation.extendsFrom(include)
+}
+dependencies {
+    // Do not expose LuaJ APIs to mods
+
+    include(project(":common")) {
+        transitive = false
+    }
+}
+jar.dependsOn(":common:jar")
+tasks.withType(Jar).configureEach{
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+jar {
+    from(configurations.include.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude("module-info.class")
+    }
+}

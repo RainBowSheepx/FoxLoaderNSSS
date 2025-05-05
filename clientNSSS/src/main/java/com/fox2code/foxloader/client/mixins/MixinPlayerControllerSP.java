@@ -4,13 +4,14 @@ import com.fox2code.foxloader.client.network.ImplNetworkPlayerControllerExt;
 import com.fox2code.foxloader.loader.ClientMod;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.player.PlayerController;
-import net.minecraft.src.client.player.PlayerControllerSP;
-import net.minecraft.src.client.renderer.Vec3D;
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.item.ItemStack;
-import net.minecraft.src.game.level.World;
+
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.level.World;
+import com.mojang.minecraft.player.controller.PlayerController;
+import com.mojang.minecraft.player.controller.PlayerControllerSP;
+import com.mojang.minecraft.render.Vec3D;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PlayerControllerSP.class)
@@ -29,15 +30,15 @@ public class MixinPlayerControllerSP extends PlayerController implements ImplNet
     }
 
     @Override
-    public boolean sendPlaceBlock(EntityPlayer player, World world, ItemStack itemstack, int x, int y, int z, int facing, Vec3D vec3d) {
+    public boolean sendPlaceBlock(EntityPlayer player, World world, ItemStack itemstack, int x, int y, int z, int facing) {
         if (ModLoader.Internal.notifyPlayerUseItemOnBlock((NetworkPlayer) player,
                 ClientMod.toRegisteredItemStack(itemstack), x, y, z, facing,
-                (float) vec3d.xCoord,(float) vec3d.yCoord,(float) vec3d.zCoord)) {
+                (float) 1,(float) 1,(float) 1)) {
             return false;
         }
         if (this.notifyRegisteredItemUsedImpl(player, itemstack, x, y, z)) {
             return false;
         }
-        return super.sendPlaceBlock(player, world, itemstack, x, y, z, facing, vec3d);
+        return super.sendPlaceBlock(player, world, itemstack, x, y, z, facing);
     }
 }

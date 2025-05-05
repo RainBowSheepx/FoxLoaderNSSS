@@ -41,7 +41,7 @@ public class InstallerGUI implements FileDropHelper.FileDropHandler {
             "FoxLoader " + BuildConfig.FOXLOADER_VERSION + " for ReIndev " + BuildConfig.REINDEV_VERSION;
     private static final int PROGRESS_BAR_MAX = DependencyHelper.commonDependencies.length + 1;
     private static final HashSet<String> MMC_PATCHES = new HashSet<>(Arrays.asList(
-            "com.fox2code.foxloader.json", "net.minecraft.json", "net.minecraftforge.json"));
+            "com.fox2code.foxloader.json", "net.minecraft.json", "net.minecraftforge.json", "org.lwjgl.json"));
     private final InstallerPlatform installerPlatform;
     private final LauncherType launcherType;
     private final JFrame jFrame;

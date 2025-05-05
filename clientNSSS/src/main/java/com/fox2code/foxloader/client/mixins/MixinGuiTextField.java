@@ -2,7 +2,8 @@ package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.loader.ClientMod;
 import com.fox2code.foxloader.registry.CommandCompat;
-import net.minecraft.src.client.gui.GuiTextField;
+
+import com.mojang.minecraft.gui.GuiTextField;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 @Mixin(GuiTextField.class)
 public class MixinGuiTextField {
+    // TODO: Check
     @Redirect(method = "textboxKeyTyped", at = @At(value = "INVOKE",
             target = "Ljava/lang/String;length()I", ordinal = 0))
     public int checkClientCommand(String instance) {

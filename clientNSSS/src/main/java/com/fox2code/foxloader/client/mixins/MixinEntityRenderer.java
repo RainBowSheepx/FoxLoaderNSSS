@@ -1,7 +1,8 @@
 package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.loader.ClientModLoader;
-import net.minecraft.src.client.renderer.EntityRenderer;
+
+import com.mojang.minecraft.render.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

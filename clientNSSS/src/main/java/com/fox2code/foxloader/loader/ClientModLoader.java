@@ -18,6 +18,7 @@ import com.fox2code.foxloader.updater.UpdateManager;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.entity.item.ItemStack;
 import com.mojang.minecraft.networknew.NetworkManager;
+import net.minecraft.src.client.packets.Packet250PluginMessage;
 import net.minecraft.fox2code.ChatColors;
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.src.client.gui.StringTranslate;
@@ -216,13 +217,13 @@ public final class ClientModLoader extends ModLoader {
         }
 
         public static void preemptivelySendClientHello(NetworkManager networkManager) {
-          /*  if (ModLoaderOptions.INSTANCE.preemptiveNetworking) {
+            if (ModLoaderOptions.INSTANCE.preemptiveNetworking) {
                 networkManager.addToSendQueue(new Packet250PluginMessage(
                         ModLoader.foxLoader.id, clientHello));
                 didPreemptiveNetworking = true;
-            } else {*/
+            } else {
                 didPreemptiveNetworking = false;
-            //}
+            }
         }
 
         public static void glScaleItem(ItemStack itemStack) {

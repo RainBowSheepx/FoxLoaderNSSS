@@ -3,14 +3,11 @@ package com.fox2code.foxloader.client.mixins;
 import com.fox2code.foxloader.loader.ClientMod;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.*;
-import net.minecraft.src.game.block.tileentity.TileEntity;
-import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.entity.other.EntityItem;
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.level.World;
-import net.minecraft.src.game.level.WorldInfo;
-import net.minecraft.src.game.level.WorldProvider;
-import net.minecraft.src.game.level.chunk.ISaveHandler;
+import com.mojang.minecraft.entity.Entity;
+import com.mojang.minecraft.entity.EntityItem;
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.tile.TileEntity;
+import com.mojang.minecraft.level.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +17,7 @@ import java.util.List;
 @Mixin(World.class)
 public abstract class MixinWorld implements RegisteredWorld {
     @Shadow public List<EntityPlayer> playerEntities;
-    @Shadow public List<TileEntity> loadedTileEntityList;
+    @Shadow public List<TileEntity> field_1049_b;
     @Shadow public List<Entity> loadedEntityList;
     @Shadow public boolean multiplayerWorld;
 
@@ -28,10 +25,6 @@ public abstract class MixinWorld implements RegisteredWorld {
     @Shadow public abstract int getBlockMetadata(int xCoord, int yCoord, int zCoord);
     @Shadow public abstract boolean setBlockAndMetadataWithNotify(int xCoord, int yCoord, int zCoord, int block, int metadata);
     @Shadow public abstract boolean entityJoinedWorld(Entity entity);
-    @Shadow public WorldInfo worldInfo;
-    @Shadow @Final
-    protected ISaveHandler saveHandler;
-    @Shadow @Final public WorldProvider worldProvider;
 
 
     @Override
@@ -81,7 +74,7 @@ public abstract class MixinWorld implements RegisteredWorld {
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends RegisteredTileEntity> getRegisteredTileEntities() {
-        return (List<? extends RegisteredTileEntity>) (Object) this.loadedTileEntityList;
+        return (List<? extends RegisteredTileEntity>) (Object) this.field_1049_b;
     }
 
     @Override
@@ -92,6 +85,6 @@ public abstract class MixinWorld implements RegisteredWorld {
 
     @Override
     public int getRegisteredDimensionID() {
-        return this.worldProvider.worldType;
+        return 0;  //this.worldProvider.worldType;
     }
 }

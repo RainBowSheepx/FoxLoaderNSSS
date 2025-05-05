@@ -1,8 +1,9 @@
 package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.client.KeyBindingAPI;
-import net.minecraft.src.client.GameSettings;
-import net.minecraft.src.client.KeyBinding;
+
+import com.mojang.minecraft.player.controller.GameSettings;
+import com.mojang.minecraft.player.controller.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinGameSettings {
     @Shadow public KeyBinding[] keyBindings;
 
-    @Redirect(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/src/client/GameSettings;loadOptions()V"))
+    @Redirect(method = "Lcom/mojang/minecraft/player/controller/GameSettings;<init>(Lcom/mojang/minecraft/Minecraft;Ljava/io/File;)V", at =
+    @At(value = "INVOKE", target = "Lcom/mojang/minecraft/player/controller/GameSettings;readOptions()V"))
     public void onLoadOptionInit(GameSettings instance) {
         this.keyBindings = KeyBindingAPI.Internal.inject(this.keyBindings);
-        instance.loadOptions();
+        instance.readOptions();
     }
 
     @Inject(method = "<init>()V", at = @At("RETURN"))

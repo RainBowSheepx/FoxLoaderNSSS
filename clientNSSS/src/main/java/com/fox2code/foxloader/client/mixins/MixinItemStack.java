@@ -4,9 +4,10 @@ import com.fox2code.foxloader.client.network.NetworkItemStack;
 import com.fox2code.foxloader.registry.GameRegistryClient;
 import com.fox2code.foxloader.registry.RegisteredItem;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.src.game.item.Item;
-import net.minecraft.src.game.item.ItemStack;
-import net.minecraft.src.game.nbt.NBTTagCompound;
+
+import com.mojang.minecraft.entity.item.Item;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.nbt.NBTTagCompound;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,13 +21,13 @@ public abstract class MixinItemStack implements RegisteredItemStack, NetworkItem
     @Shadow public int itemID;
     @Shadow public int stackSize;
     @Shadow public int itemDamage;
-    @Shadow public NBTTagCompound nbtTagCompound;
+   // @Shadow public NBTTagCompound nbtTagCompound; // Iten's don't have nbt
     @Unique private int networkId;
 
     @Shadow public abstract Item getItem();
-    @Shadow public abstract String getDisplayName();
-    @Shadow public abstract void setItemName(String par1Str);
-    @Shadow public abstract boolean hasDisplayName();
+     public abstract String getDisplayName();
+     public abstract void setItemName(String par1Str);
+     public abstract boolean hasDisplayName();
 
     @Inject(method = "<init>(II)V", at = @At("RETURN"))
     public void onNewItemStack(int id, int count, CallbackInfo ci) {
@@ -38,10 +39,10 @@ public abstract class MixinItemStack implements RegisteredItemStack, NetworkItem
         this.verifyRegisteredItemStack();
     }
 
-    @Inject(method = "<init>(IIILnet/minecraft/src/game/nbt/NBTTagCompound;)V", at = @At("RETURN"))
+/*    @Inject(method = "<init>(IIILnet/minecraft/src/game/nbt/NBTTagCompound;)V", at = @At("RETURN"))
     public void onNewItemStack(int id, int count, int damage, NBTTagCompound tagCompound, CallbackInfo ci) {
         this.verifyRegisteredItemStack();
-    }
+    }*/
 
     @Inject(method = "readFromNBT", at = @At("RETURN"))
     public void onReadFromNBT(NBTTagCompound nbtTagCompound, CallbackInfo ci) {
@@ -95,36 +96,38 @@ public abstract class MixinItemStack implements RegisteredItemStack, NetworkItem
 
     @Override
     public boolean hasCustomWorldItemScale() {
-        return this.nbtTagCompound != null &&
-                this.nbtTagCompound.hasKey("WorldItemScale");
+/*        return this.nbtTagCompound != null &&
+                this.nbtTagCompound.hasKey("WorldItemScale");*/
+        return false;
     }
 
     @Override
     public void resetWorldItemScale() {
-        if (this.nbtTagCompound != null &&
+/*        if (this.nbtTagCompound != null &&
                 this.nbtTagCompound.hasKey("WorldItemScale")) {
             this.nbtTagCompound.removeTag("WorldItemScale");
-        }
+        }*/
     }
 
     @Override
     public void setWorldItemScale(float scale) {
-        if (this.nbtTagCompound == null) {
+/*        if (this.nbtTagCompound == null) {
             this.nbtTagCompound = new NBTTagCompound();
         }
-        this.nbtTagCompound.setFloat("WorldItemScale", scale);
+        this.nbtTagCompound.setFloat("WorldItemScale", scale);*/
     }
 
     @Override
     public float getWorldItemScale() {
-        if (this.nbtTagCompound != null &&
+/*        if (this.nbtTagCompound != null &&
                 this.nbtTagCompound.hasKey("WorldItemScale")) {
             try {
                 return Math.max(this.nbtTagCompound.getFloat("WorldItemScale"),
                         RegisteredItemStack.MINIMUM_WORLD_ITEM_SCALE);
             } catch (ClassCastException ignored) {}
         }
-        return this.getRegisteredItem().getWorldItemScale();
+        return this.getRegisteredItem().getWorldItemScale();*/
+        return 0;
     }
 
     @Override

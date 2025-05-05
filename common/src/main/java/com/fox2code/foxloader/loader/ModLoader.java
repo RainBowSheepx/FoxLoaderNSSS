@@ -32,7 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ModLoader extends Mod {
-    public static final boolean I_AM_EXPERIMENTAL = false; // Show text on client main menu
+    public static final boolean I_AM_EXPERIMENTAL = true; // Show text on client main menu
     public static final boolean TEST_MODE = Boolean.getBoolean("foxloader.test-mode");
     private static final String INJECT_MOD = System.getProperty("foxloader.inject-mod");
     public static final boolean DEV_MODE = Boolean.getBoolean("foxloader.dev-mode");

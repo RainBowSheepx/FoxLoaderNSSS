@@ -4,9 +4,10 @@ import com.fox2code.foxloader.registry.GameRegistry;
 import com.fox2code.foxloader.registry.RegisteredBlock;
 import com.fox2code.foxloader.registry.RegisteredItem;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.src.game.block.Block;
-import net.minecraft.src.game.item.Item;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.entity.item.Item;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.level.tile.Block;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,14 +15,14 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Item.class)
 public class MixinItem implements RegisteredItem {
-    @Shadow @Final public int itemID;
+    @Shadow @Final public int shiftedIndex;
     @Shadow protected int maxStackSize;
     @Unique float worldItemScale = 1.0F;
 
     @Override
     public RegisteredBlock asRegisteredBlock() {
-        int id = GameRegistry.convertItemIdToBlockId(this.itemID);
-        return id == -1 ? null : (RegisteredBlock) Block.blocksList[id];
+        int id = GameRegistry.convertItemIdToBlockId(this.shiftedIndex);
+        return id == -1 ? null : (RegisteredBlock) Block.allBlocks[id];
     }
 
     @Override
@@ -32,7 +33,7 @@ public class MixinItem implements RegisteredItem {
 
     @Override
     public int getRegisteredItemId() {
-        return this.itemID;
+        return this.shiftedIndex;
     }
 
     @Override

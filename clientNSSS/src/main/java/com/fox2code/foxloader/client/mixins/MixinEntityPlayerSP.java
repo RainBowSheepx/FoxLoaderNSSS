@@ -6,15 +6,11 @@ import com.fox2code.foxloader.loader.ModContainer;
 import com.fox2code.foxloader.network.NetworkConnection;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.client.gui.GuiScreen;
+import com.mojang.minecraft.Minecraft;
+import com.mojang.minecraft.entity.EntityPlayer;
+import com.mojang.minecraft.entity.EntityPlayerSP;
+import com.mojang.minecraft.level.World;
 import net.minecraft.src.client.gui.StringTranslate;
-import net.minecraft.src.client.player.EntityPlayerSP;
-import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.entity.player.EntityPlayer;
-import net.minecraft.src.game.level.EnumStatus;
-import net.minecraft.src.game.level.World;
-import net.minecraft.src.game.nbt.NBTTagCompound;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -48,11 +44,11 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
     public void displayChatMessage(String chatMessage) {
         StringTranslate st = StringTranslate.getInstance();
         if (chatMessage.indexOf('\n') == -1) {
-            Minecraft.getInstance().ingameGUI.addChatMessage(st.translateKey(chatMessage));
+            Minecraft.getMinecraft().ingameGUI.addChatMessage(st.translateKey(chatMessage));
         } else {
             String[] splits = chatMessage.split("\\n");
             for (String split : splits) {
-                Minecraft.getInstance().ingameGUI.addChatMessage(st.translateKey(split));
+                Minecraft.getMinecraft().ingameGUI.addChatMessage(st.translateKey(split));
             }
         }
     }
@@ -64,12 +60,12 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
 
     @Override
     public String getPlayerName() {
-        return ((EntityPlayer) (Object) this).username;
+        return ((EntityPlayer) (Object) this).playerName;
     }
 
     @Override
     public boolean isOperator() {
-        return ((Entity) (Object) this).worldObj.worldInfo.isCheatsEnabled();
+        return Minecraft.getMinecraft().mcWorld.cheatsDisabled;
     }
 
     @Override
@@ -79,13 +75,13 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
 
     @Override
     public NetworkPlayerController getNetworkPlayerController() {
-        return (NetworkPlayerController) Minecraft.getInstance().playerController;
+        return (NetworkPlayerController) Minecraft.getMinecraft().playerController;
     }
 
     @Override
     public boolean isConnected() {
-        final Minecraft mc = Minecraft.getInstance();
-        return mc.theWorld != null && !mc.isMultiplayerWorld();
+        final Minecraft mc = Minecraft.getMinecraft();
+        return mc.mcWorld != null && !mc.mcWorld.multiplayerWorld;
     }
 
     @Override
@@ -93,6 +89,7 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
         EntityPlayerSP networkPlayerSP = (EntityPlayerSP) (Object) this;
         return ClientMod.toRegisteredItemStack(networkPlayerSP.inventory.getCurrentItem());
     }
+/*
 
     @Override
     public void sendPlayerThroughPortalRegistered() {
@@ -114,52 +111,10 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
             this.goingtodim=name;
         }
     }
-    @Inject(method = "onLivingUpdate",at=@At("HEAD"))
-    public void onLivingUpdate(CallbackInfo ci) throws NoSuchFieldException, IllegalAccessException {
-        if (this.incustomportal){
-            if (!this.worldObj.multiplayerWorld && this.ridingEntity != null) {
-                this.mountEntity((Entity)null);
-            }
+*/
 
-            if (this.mc.currentScreen != null) {
-                this.mc.displayGuiScreen((GuiScreen)null);
-            }
 
-            if (this.timeInPortalcustom == 0.0F) {
-                this.mc.sndManager.playSoundFX("portal.trigger", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
-            }
-
-            this.timeInPortalcustom += 0.0125F;
-            if (this.timeInPortalcustom >= 1.0F) {
-                this.timeInPortalcustom = 1.0F;
-                if (!this.worldObj.multiplayerWorld) {
-                    this.timeUntilPortalcustom = 10;
-                    this.mc.sndManager.playSoundFX("portal.travel", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
-                    this.mc.usePortal();
-                    this.customDimension=this.dimension==3?this.goingtodim:"notcustom";
-                    this.goingtodim=null;
-                }
-            }
-            this.incustomportal = false;
-
-        }
-        else {
-            this.goingtodim=null;
-            if (this.timeInPortalcustom > 0.0F) {
-                this.timeInPortalcustom -= 0.05F;
-            }
-
-            if (this.timeInPortalcustom < 0.0F) {
-                this.timeInPortalcustom = 0.0F;
-            }
-        }
-
-        if (this.timeUntilPortalcustom > 0) {
-            this.timeUntilPortalcustom--;
-        }
-    }
-
-    @Override
+/*    @Override
     public void preparePlayerToSpawn() {
         super.preparePlayerToSpawn();
 
@@ -171,9 +126,9 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
-    @Unique
+/*    @Unique
     public String customDimension="notcustom";
     @Unique
     public String customrespawnDimension="notcustom";
@@ -201,5 +156,5 @@ public abstract class MixinEntityPlayerSP extends EntityPlayer implements Networ
             throw new RuntimeException(e);
         }
         return super.sleepInBedAt(x, y, z);
-    }
+    }*/
 }

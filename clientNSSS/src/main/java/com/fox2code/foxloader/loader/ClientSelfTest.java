@@ -1,7 +1,8 @@
 package com.fox2code.foxloader.loader;
 
 import com.fox2code.foxloader.network.NetworkPlayer;
-import net.minecraft.src.client.player.EntityPlayerSP;
+import com.mojang.minecraft.entity.EntityPlayerSP;
+
 
 final class ClientSelfTest {
     static void selfTest() {

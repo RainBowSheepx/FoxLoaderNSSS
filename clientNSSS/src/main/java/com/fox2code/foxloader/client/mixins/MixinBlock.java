@@ -4,9 +4,10 @@ import com.fox2code.foxloader.client.registry.RegisteredBlockImpl;
 import com.fox2code.foxloader.registry.RegisteredBlock;
 import com.fox2code.foxloader.registry.RegisteredItem;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.src.game.block.Block;
-import net.minecraft.src.game.item.Item;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.entity.item.Item;
+import com.mojang.minecraft.entity.item.ItemStack;
+import com.mojang.minecraft.level.tile.Block;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Block.class)
 public abstract class MixinBlock implements RegisteredBlock, RegisteredBlockImpl {
 
-    @Shadow public abstract int getBlockID();
+    //@Shadow public abstract int getBlockID();
     @Shadow @Final public int blockID;
 
     @Shadow protected abstract Block setHardness(float hardness);
@@ -22,7 +23,7 @@ public abstract class MixinBlock implements RegisteredBlock, RegisteredBlockImpl
 
     @Override
     public RegisteredItem asRegisteredItem() {
-        return (RegisteredItem) Item.itemsList[this.getBlockID()];
+        return (RegisteredItem) Item.itemsList[blockID];
     }
 
     @Override

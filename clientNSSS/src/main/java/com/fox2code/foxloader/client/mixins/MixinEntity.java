@@ -2,8 +2,8 @@ package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.registry.RegisteredEntity;
 import com.fox2code.foxloader.registry.RegisteredWorld;
-import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.level.World;
+import com.mojang.minecraft.entity.Entity;
+import com.mojang.minecraft.level.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -13,7 +13,7 @@ public abstract class MixinEntity implements RegisteredEntity {
     @Shadow public double posY;
     @Shadow public double posZ;
     @Shadow public World worldObj;
-    @Shadow public Entity ridingEntity;
+    @Shadow public Entity entityBeingRidden;
     @Shadow public Entity riddenByEntity;
 
     @Shadow public abstract void setPosition(double var1, double var3, double var5);
@@ -51,7 +51,7 @@ public abstract class MixinEntity implements RegisteredEntity {
 
     @Override
     public RegisteredEntity getRegisteredRidding() {
-        return (RegisteredEntity) this.ridingEntity;
+        return (RegisteredEntity) this.entityBeingRidden;
     }
 
     @Override

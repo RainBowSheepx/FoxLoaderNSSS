@@ -5,26 +5,22 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AccessorEntityList",
-    "AcessorSaveHandlers",
-    "MixinChunkLoader",
     "MixinBlock",
     "MixinBlockFire",
-    "MixinBlockPortal",
     "MixinChunk",
-    "MixinChunkBlockMap",
-    "MixinCommandHelperGUI",
+
     "MixinContainer",
-    "MixinContainerCreative",
+
     "MixinEntity",
     "MixinEntityClientPlayerMP",
     "MixinEntityItem",
-    "MixinEntityLiving",
+
     "MixinEntityPlayer",
     "MixinEntityPlayerSP",
     "MixinEntityRenderer",
     "MixinGameSettings",
     "MixinGuiConnecting",
-    "MixinGuiContainer",
+
     "MixinGuiDebug",
     "MixinGuiIngameMenu",
     "MixinGuiMainMenu",
@@ -34,27 +30,24 @@
     "MixinItemRenderer",
     "MixinItemStack",
     "MixinMinecraft",
-    "MixinNBTTagIntArray",
+
     "MixinNetClientHandler",
-    "MixinNetherPortalHandler",
-    "MixinPacket",
+    "MixinNetHandler",
+
     "MixinPacket2Handshake",
     "MixinPlayerCommandHandler",
-    "MixinPlayerController",
+
     "MixinPlayerControllerMix",
     "MixinPlayerControllerMP",
     "MixinPlayerControllerSP",
-    "MixinPlayerControllerTest",
+
     "MixinRenderEngine",
     "MixinRenderItem",
     "MixinRenderManager",
-    "MixinSaveOldDir",
-    "MixinSaveHandler",
+
     "MixinStringTranslate",
-    "MixinTextureMap",
-    "MixinTexturePackCustom",
+
     "MixinTileEntity",
-    "MixinWorld",
-    "MixinWorldProvider"
+    "MixinWorld"
   ]
 }

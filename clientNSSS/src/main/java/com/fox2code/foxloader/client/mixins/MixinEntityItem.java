@@ -3,8 +3,9 @@ package com.fox2code.foxloader.client.mixins;
 import com.fox2code.foxloader.loader.ClientMod;
 import com.fox2code.foxloader.registry.RegisteredEntityItem;
 import com.fox2code.foxloader.registry.RegisteredItemStack;
-import net.minecraft.src.game.entity.other.EntityItem;
-import net.minecraft.src.game.item.ItemStack;
+
+import com.mojang.minecraft.entity.EntityItem;
+import com.mojang.minecraft.entity.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

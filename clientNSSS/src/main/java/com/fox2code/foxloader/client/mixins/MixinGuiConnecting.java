@@ -1,7 +1,8 @@
 package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.network.SidedMetadataAPI;
-import net.minecraft.src.client.gui.GuiConnecting;
+
+import com.mojang.minecraft.gui.GuiConnecting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

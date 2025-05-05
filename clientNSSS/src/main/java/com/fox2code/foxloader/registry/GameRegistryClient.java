@@ -68,7 +68,7 @@ public class GameRegistryClient extends GameRegistry {
 
     public static void initialize() {
         // The check is actually for initializing both Item and Block
-        if (Block.allBlocks[0].blockID != Item.itemsList[0].shiftedIndex) {
+        if (Block.allBlocks[1].blockID != Item.itemsList[1].shiftedIndex) {
             throw new IllegalStateException("Air block is not air?");
         }
     }
@@ -77,7 +77,7 @@ public class GameRegistryClient extends GameRegistry {
         if (!ModLoader.areAllModsLoaded())
             throw new IllegalArgumentException("Mods didn't finished to load!");
         final Block stoneBlock = Block.allBlocks[1];
-        for (int i = 0; i < Block.allBlocks.length; i++) {
+        for (int i = 1; i < Block.allBlocks.length; i++) {
             if (Block.allBlocks[i] == null) {
                 Block.allBlocks[i] = stoneBlock;
             }

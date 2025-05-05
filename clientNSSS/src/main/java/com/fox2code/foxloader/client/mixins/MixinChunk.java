@@ -1,7 +1,8 @@
 package com.fox2code.foxloader.client.mixins;
 
 import com.fox2code.foxloader.registry.GameRegistryClient;
-import net.minecraft.src.game.level.chunk.Chunk;
+
+import com.mojang.minecraft.level.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,24 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Chunk.class)
 public class MixinChunk {
-    @Shadow public short[] blocks;
-    @Shadow public boolean isChunkLoaded;
-    @Inject(method = "tryOptimizeChunk",at = @At("HEAD"),cancellable = true)
-    public void tryOptimizeChunk(CallbackInfo ci) {
-        if (this.isChunkLoaded && this.blocks!=null&&blocks.length!=4096) {
-            this.blocks=null;
-            ci.cancel();
-        }
-    }
+    @Shadow public byte[] blocks;
 
-    @Inject(method = "setChunkData", at = @At("RETURN"))
-    public void onSetChunkData(byte[] data, int mix, int miy, int miz, int max, int may, int maz, boolean init, int progress, CallbackInfoReturnable<Integer> cir) {
+
+    @Inject(method = "getChunkData", at = @At("RETURN"))
+    public void onSetChunkData(byte[] data, int mix, int miy, int miz, int max, int may, int maz, int progress, CallbackInfoReturnable<Integer> cir) {
         if (this.blocks != null) {
             for (int var17 = mix; var17 < max; ++var17) {
                 for (int var31 = miy; var31 < may; ++var31) {
                     for (int zter = miz; zter < maz; ++zter) {
                         int pia = var17 << 8 | zter << 4 | var31;
-                        this.blocks[pia] = GameRegistryClient.blockIdMappingIn[this.blocks[pia]];
+                        this.blocks[pia] = (byte) GameRegistryClient.blockIdMappingIn[this.blocks[pia]];
                     }
                 }
             }
