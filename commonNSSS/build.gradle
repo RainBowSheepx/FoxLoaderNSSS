@@ -10,7 +10,21 @@ configurations {
     implementation.extendsFrom(include)
 }
 dependencies {
-    // Do not expose LuaJ APIs to mods
+    api 'org.ow2.asm:asm-util:9.7'
+    api 'org.ow2.asm:asm-commons:9.7'
+    api 'org.semver4j:semver4j:5.3.0'
+    api 'net.fabricmc:sponge-mixin:0.15.0+mixin.0.8.7' // <- https://maven.fabricmc.net/net/fabricmc/sponge-mixin/
+    api 'io.github.llamalad7:mixinextras-common:0.4.0' // <- https://github.com/LlamaLad7/MixinExtras/releases
+    api 'com.github.bawnorton.mixinsquared:mixinsquared-common:0.2.0-beta.6' // <- https://github.com/Bawnorton/MixinSquared/releases
+    api 'it.unimi.dsi:fastutil-core:8.5.14'
+
+    // Mixin dependencies
+    api 'com.google.code.gson:gson:2.10.1'
+    api 'com.google.guava:guava:21.0'
+    api 'org.apache.commons:commons-lang3:3.3.2'
+
+    // Dev annotations
+    api 'org.jetbrains:annotations:24.1.0'
 
     include(project(":common")) {
         transitive = false
